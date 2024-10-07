@@ -178,6 +178,8 @@ class ApiController extends Controller
                 $saveCustomer->mobile = isset($request->mobile) ? $request->mobile : '';
                 $saveCustomer->slug_id = generateUniqueSlug($request->name, 5);
                 $saveCustomer->profile = isset($request->profile) ? $request->profile : '';
+                $saveCustomer->user_document = isset($request->user_document) ? $request->user_document : '';
+
 
 
                 $saveCustomer->fcm_id = isset($request->fcm_id) ? $request->fcm_id : '';
@@ -202,9 +204,11 @@ class ApiController extends Controller
                 $saveCustomer->facebook_id = isset($request->facebook_id) ? $request->facebook_id : '';
                 $saveCustomer->twiiter_id = isset($request->twiiter_id) ? $request->twiiter_id : '';
                 $saveCustomer->instagram_id = isset($request->instagram_id) ? $request->instagram_id : '';
-                $saveCustomer->isActive = '1';
-                $saveCustomer->verification_doc = 0;  // 0:pending
-                $saveCustomer->doc_verification_status = 0; //0:not verified
+                $saveCustomer->isActive =1;
+                $saveCustomer->verification_doc = 1;  // 0:pending
+                $saveCustomer->doc_verification_status = 1; //0:not verified
+                $saveCustomer->otp_verified =1; //false
+
 
 
 
@@ -473,8 +477,13 @@ class ApiController extends Controller
                     'country',
                     'verification_doc',
                     'user_document',
-                    'doc_verification_status'
+                    'doc_verification_status',
+                    'otp_verified'
                 ]);
+
+
+        //    $    intval($request->otp_verified)
+
 
                 $customer->update($fieldsToUpdate);
 
@@ -507,7 +516,33 @@ class ApiController extends Controller
                     }
                 }
 
+                // Update User Documnet
+                if ($request->hasFile('user_document')) {
+                    $destinationPath = public_path('images') . config('global.USER_IMG_PATH');
+                    if (!is_dir($destinationPath)) {
+                        mkdir($destinationPath, 0777, true);
+                    }
+
+                    $old_image = $customer->user_document;
+                    $document = $request->file('user_document');
+                    $imageName = microtime(true) . "." . $document->getClientOriginalExtension();
+
+                    if ($document->move($destinationPath, $imageName)) {
+                        $customer->user_document = $imageName;
+                        if ($old_image != '') {
+                            if (file_exists(public_path('images') . config('global.USER_IMG_PATH') . $old_image)) {
+                                unlink(public_path('images') . config('global.USER_IMG_PATH') . $old_image);
+                            }
+                        }
+                        $customer->update();
+                    }
+                }
+
+                // intval($fieldsToUpdate->otp_verified);
+
+
                 DB::commit();
+                // return response()->json(['error' => false, 'data' => $request->otp_verified]);
                 return response()->json(['error' => false, 'data' => $customer]);
             } else {
                 return response()->json(['error' => false, 'message' => "No data found!", 'data' => []]);
@@ -800,6 +835,8 @@ class ApiController extends Controller
             'property_type' => 'required',
             'address' => 'required',
             'title_image' => 'required|file|max:3000|mimes:jpeg,png,jpg',
+            'document' => 'required|image|max:3000|mimes:jpeg,png,jpg',
+
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -865,17 +902,20 @@ class ApiController extends Controller
                     $saveProperty->title_image  = '';
                 }
 
-                // Meta Image
-                if ($request->hasFile('meta_image')) {
-                    $destinationPath = public_path('images') . config('global.PROPERTY_SEO_IMG_PATH');
+                // document Image
+                if ($request->hasFile('document')) {
+                    $destinationPath = public_path('images') . config('global.PROJECT_Documnet_PATH');
                     if (!is_dir($destinationPath)) {
                         mkdir($destinationPath, 0777, true);
                     }
-                    $file = $request->file('meta_image');
+                    $file = $request->file('document');
                     $imageName = microtime(true) . "." . $file->getClientOriginalExtension();
-                    $metaImageName = handleFileUpload($request, 'meta_image', $destinationPath, $imageName);
-                    $saveProperty->meta_image = $metaImageName;
+                    $documentImageName = handleFileUpload($request, 'document', $destinationPath, $imageName);
+                    $saveProperty->document = $documentImageName;
+                }else {
+                    $saveProperty->document  = '';
                 }
+
 
                 // three_d_image
                 if ($request->hasFile('three_d_image')) {
@@ -1003,10 +1043,11 @@ class ApiController extends Controller
                 $response['data'] = $property_details;
             }
         } catch (Exception $e) {
+
             DB::rollback();
             $response = array(
                 'error' => true,
-                'message' => 'Something Went Wrong'
+                'message' => 'Something Went Wrong .'
             );
             return response()->json($response, 500);
         }
@@ -1020,7 +1061,7 @@ class ApiController extends Controller
     {
         $validator = Validator::make($request->all(), [
             // 'id' => 'required',
-            'action_type' => 'required',
+            'action_type' => 'required|integer',
             'price' => ['nullable', function ($attribute, $value, $fail) {
                 if ($value > 1000000000000) {
                     $fail("The $attribute must not exceed one trillion that is 1000000000000.");
@@ -1137,6 +1178,20 @@ class ApiController extends Controller
                             }
                         }
                         $property->title_image = $imageName;
+                    }
+
+                    if ($request->hasFile('document')) {
+                        $profile = $request->file('document');
+                        $imageName = microtime(true) . "." . $profile->getClientOriginalExtension();
+                        $profile->move($destinationPath, $imageName);
+
+
+                        if ($property->document != '') {
+                            if (file_exists(public_path('images') . config('global.PROJECT_Documnet_PATH') .  $property->document)) {
+                                unlink(public_path('images') . config('global.PROJECT_Documnet_PATH') . $property->document);
+                            }
+                        }
+                        $property->document = $imageName;
                     }
 
 
@@ -1573,12 +1628,12 @@ class ApiController extends Controller
             DB::commit();
             $response['error'] = false;
             $response['message'] = 'Delete Successfully';
-            return response()->json($response);
+            return response()->json($response,200);
         } catch (Exception $e) {
             DB::rollBack();
             $response = array(
                 'error' => true,
-                'message' => 'Something Went Wrong'
+                'message' => 'Something Went Wrong'.$e
             );
             return response()->json($response, 500);
         }

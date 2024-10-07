@@ -43,8 +43,14 @@ class Customer extends Authenticatable
         'city',
         'state',
         'country',
-        'slug_id'
+        'slug_id',
+        "verification_doc",
+        "doc_verification_status",
+        "otp_verified",
+        "user_document"
     ];
+
+    protected $primarykey = "id";
 
     protected $hidden = [
         'api_token'

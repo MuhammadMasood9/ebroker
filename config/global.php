@@ -5,6 +5,8 @@ return [
     'SEO_IMG_PATH' => '/seo_setting/',
     'PROPERTY_SEO_IMG_PATH' => '/property_seo_img/',
     'PROJECT_SEO_IMG_PATH' => '/project_seo_img/',
+    'PROJECT_Documnet_PATH' => '/project_document_img/',
+
 
     'SLIDER_IMG_PATH' => '/slider/',
     'NOTIFICATION_IMG_PATH' => '/notification/',

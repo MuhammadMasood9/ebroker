@@ -28,7 +28,8 @@ class Property extends Model
         'total_click',
         'latitude',
         'longitude',
-        'three_d_image'
+        'three_d_image',
+        'document'
 
     ];
     protected $hidden = [

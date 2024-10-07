@@ -40,6 +40,7 @@ Route::post('set_property_total_click', [ApiController::class, 'set_property_tot
 // Route::get('paypal1', [ApiController::class, 'paypal']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    //add document
     Route::post('document_verification_request', [ApiController::class, 'document_verification_request']);
 
     Route::post('update_profile', [ApiController::class, 'update_profile']);
@@ -51,7 +52,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('add_favourite', [ApiController::class, 'add_favourite']);
     Route::post('delete_favourite', [ApiController::class, 'delete_favourite']);
-    Route::post('delete_user', [ApiController::class, 'delete_user']);
+    Route::delete ('delete_user', [ApiController::class, 'delete_user']);
     Route::post('user_purchase_package', [ApiController::class, 'user_purchase_package']);
     Route::post('interested_users', [ApiController::class, 'interested_users']);
     Route::post('delete_advertisement', [ApiController::class, 'delete_advertisement']);
@@ -74,7 +75,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('personalised-fields', [ApiController::class, 'storeUserPersonalisedInterest']);
     Route::delete('personalised-fields', [ApiController::class, 'deleteUserPersonalisedInterest']);
 
-    Route::post('delete_property', [ApiController::class, 'delete_property']);
+    Route::delete('delete_property', [ApiController::class, 'delete_property']);
 
     Route::get('get_interested_users', [ApiController::class, 'get_interested_users']);
 

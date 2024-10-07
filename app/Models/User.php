@@ -23,7 +23,8 @@ class User extends Authenticatable
         'password',
         'type',
         'permissions',
-        'slug_id'
+        'slug_id',
+        "verification_doc"
     ];
 
     /**
