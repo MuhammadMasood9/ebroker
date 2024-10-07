@@ -201,8 +201,27 @@ class CategoryController extends Controller
         return response()->json($bulkData);
     }
 
+<<<<<<< HEAD
 
 
+=======
+    public function destroy(string $id)
+    {
+        if (!has_permissions('delete', 'category')) {
+            $response['error'] = true;
+            $response['message'] = PERMISSION_ERROR_MSG;
+            return response()->json($response);
+        }else{
+            $package = Category::find($id);
+            $package->delete();
+
+
+            ResponseService::successRedirectResponse('Category Deleted Successfully ');
+
+        }
+    }
+
+>>>>>>> source-repo/main
     public function updateCategory(Request $request)
     {
         if (!has_permissions('delete', 'categories')) {

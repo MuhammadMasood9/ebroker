@@ -56,6 +56,15 @@
                     </li>
                 @endif
 
+                @if (has_permissions('read', 'document_verification'))
+                <li class="sidebar-item">
+                    <a href="{{ url('document-verification') }}" class='sidebar-link'>
+                        <i class="bi bi-text-paragraph"></i>
+                        <span class="menu-item">{{ __('DocumentVerification') }}</span>
+                    </a>
+                </li>
+            @endif
+
                 @if (has_permissions('read', 'property'))
                     <li class="sidebar-item">
                         <a href="{{ url('property') }}" class='sidebar-link'>

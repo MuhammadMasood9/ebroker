@@ -40,7 +40,11 @@ class ParameterController extends Controller
     {
         $opt_value = null;
 
+<<<<<<< HEAD
         if(isset($request->opt)){
+=======
+        if (isset($request->opt)) {
+>>>>>>> source-repo/main
             $opt_value = json_encode($request->opt, JSON_FORCE_OBJECT);
         }
 
@@ -200,6 +204,20 @@ class ParameterController extends Controller
      */
     public function destroy($id)
     {
+<<<<<<< HEAD
         //
+=======
+        if (!has_permissions('delete', 'parameter')) {
+            $response['error'] = true;
+            $response['message'] = PERMISSION_ERROR_MSG;
+            return response()->json($response);
+        } else {
+            $package = parameter::find($id);
+            $package->delete();
+
+
+            ResponseService::successRedirectResponse('Facility Deleted Successfully ');
+        }
+>>>>>>> source-repo/main
     }
 }

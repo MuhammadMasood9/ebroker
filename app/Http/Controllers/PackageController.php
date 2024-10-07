@@ -31,6 +31,10 @@ class PackageController extends Controller
         $category = Category::select('id', 'category')->where('status', 1)->get();
         $currency_symbol = Setting::where('type', 'currency_symbol')->pluck('data')->first();
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> source-repo/main
         return view('packages.index', compact('slider', 'category', 'currency_symbol'));
     }
 
@@ -216,8 +220,13 @@ class PackageController extends Controller
         } else {
             Package::where('id', $request->id)->update(['status' => $request->status]);
             $response['error'] = false;
+<<<<<<< HEAD
             return response()->json($response);
         }
+=======
+
+        }return response()->json($response);
+>>>>>>> source-repo/main
     }
     /**
      * Remove the specified resource from storage.
@@ -225,9 +234,26 @@ class PackageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+<<<<<<< HEAD
     public function destroy($id)
     {
         //
+=======
+    public function destroy(string $id)
+    {
+        if (!has_permissions('delete', 'package')) {
+            $response['error'] = true;
+            $response['message'] = PERMISSION_ERROR_MSG;
+            return response()->json($response);
+        }else{
+            $package = Package::find($id);
+            $package->delete();
+
+
+            ResponseService::successRedirectResponse('Package Deleted Successfully ');
+
+        }
+>>>>>>> source-repo/main
     }
     public function get_user_package_list(Request $request)
     {

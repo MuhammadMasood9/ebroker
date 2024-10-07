@@ -27,6 +27,7 @@ class Kernel extends HttpKernel
             DemoMiddleware::class,
         ],
 
+<<<<<<< HEAD
         // 'api' => [
         //     \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         //     'throttle:api',
@@ -40,6 +41,14 @@ class Kernel extends HttpKernel
         \Illuminate\Routing\Middleware\SubstituteBindings::class,
     ],
 
+=======
+        'api' => [
+            // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            'throttle:api',
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            DemoMiddleware::class,
+        ],
+>>>>>>> source-repo/main
     ];
 
     protected $routeMiddleware = [
