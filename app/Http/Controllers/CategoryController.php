@@ -201,10 +201,8 @@ class CategoryController extends Controller
         return response()->json($bulkData);
     }
 
-<<<<<<< HEAD
 
 
-=======
     public function destroy(string $id)
     {
         if (!has_permissions('delete', 'category')) {
@@ -221,7 +219,6 @@ class CategoryController extends Controller
         }
     }
 
->>>>>>> source-repo/main
     public function updateCategory(Request $request)
     {
         if (!has_permissions('delete', 'categories')) {

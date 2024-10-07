@@ -204,10 +204,10 @@ class ApiController extends Controller
                 $saveCustomer->facebook_id = isset($request->facebook_id) ? $request->facebook_id : '';
                 $saveCustomer->twiiter_id = isset($request->twiiter_id) ? $request->twiiter_id : '';
                 $saveCustomer->instagram_id = isset($request->instagram_id) ? $request->instagram_id : '';
-                $saveCustomer->isActive =1;
+                $saveCustomer->isActive = 1;
                 $saveCustomer->verification_doc = 1;  // 0:pending
                 $saveCustomer->doc_verification_status = 1; //0:not verified
-                $saveCustomer->otp_verified =1; //false
+                $saveCustomer->otp_verified = 1; //false
 
 
 
@@ -482,7 +482,7 @@ class ApiController extends Controller
                 ]);
 
 
-        //    $    intval($request->otp_verified)
+                //    $    intval($request->otp_verified)
 
 
                 $customer->update($fieldsToUpdate);
@@ -559,47 +559,47 @@ class ApiController extends Controller
     //* START :: document_verification_request   *//
 
     public function document_verification_request(Request $request)
-{
-    try {
-        // Get the current authenticated user
-        $currentUser = Auth::user();
+    {
+        try {
+            // Get the current authenticated user
+            $currentUser = Auth::user();
 
-        $userVerificationDoc = Customer::find($currentUser->id);
+            $userVerificationDoc = Customer::find($currentUser->id);
 
-        if (!$userVerificationDoc) {
-            return response()->json(['error' => 'Customer not found.'], 404);
-        }
-
-        // Validate the incoming request fields and file
-        $request->validate(rules: [
-            'user_document' => 'required|file|mimes:jpg,jpeg,png,pdf,svg|max:5000',
-        ]);
-
-        // Check if a file was uploaded
-        if ($request->hasFile('user_document')) {
-            $verificationImage = $request->file('user_document');
-            $imageName = microtime(true) . "." . $verificationImage->getClientOriginalExtension();
-
-
-            $path = $verificationImage->storeAs(config('global.USER_IMG_PATH'), $imageName);
-
-            $userVerificationDoc->user_document = $imageName;
-            if (!empty($userVerificationDoc->getOriginal('user_document'))) {
-                Storage::delete(config('global.USER_IMG_PATH') . '/' . $userVerificationDoc->getOriginal('user_document'));
+            if (!$userVerificationDoc) {
+                return response()->json(['error' => 'Customer not found.'], 404);
             }
 
+            // Validate the incoming request fields and file
+            $request->validate(rules: [
+                'user_document' => 'required|file|mimes:jpg,jpeg,png,pdf,svg|max:5000',
+            ]);
 
-            $userVerificationDoc->save();
+            // Check if a file was uploaded
+            if ($request->hasFile('user_document')) {
+                $verificationImage = $request->file('user_document');
+                $imageName = microtime(true) . "." . $verificationImage->getClientOriginalExtension();
 
-            return response()->json(['message' => 'Document uploaded and updated successfully.']);
-        } else {
-            return response()->json(['error' => 'No document file uploaded.'], 400);
+
+                $path = $verificationImage->storeAs(config('global.USER_IMG_PATH'), $imageName);
+
+                $userVerificationDoc->user_document = $imageName;
+                if (!empty($userVerificationDoc->getOriginal('user_document'))) {
+                    Storage::delete(config('global.USER_IMG_PATH') . '/' . $userVerificationDoc->getOriginal('user_document'));
+                }
+
+
+                $userVerificationDoc->save();
+
+                return response()->json(['message' => 'Document uploaded and updated successfully.']);
+            } else {
+                return response()->json(['error' => 'No document file uploaded.'], 400);
+            }
+        } catch (\Exception $e) {
+
+            return response()->json(['error' => 'Document verification failed: ' . $e->getMessage()], 500);
         }
-    } catch (\Exception $e) {
-
-        return response()->json(['error' => 'Document verification failed: ' . $e->getMessage()], 500);
     }
-}
 
 
 
@@ -912,7 +912,7 @@ class ApiController extends Controller
                     $imageName = microtime(true) . "." . $file->getClientOriginalExtension();
                     $documentImageName = handleFileUpload($request, 'document', $destinationPath, $imageName);
                     $saveProperty->document = $documentImageName;
-                }else {
+                } else {
                     $saveProperty->document  = '';
                 }
 
@@ -1628,12 +1628,12 @@ class ApiController extends Controller
             DB::commit();
             $response['error'] = false;
             $response['message'] = 'Delete Successfully';
-            return response()->json($response,200);
+            return response()->json($response, 200);
         } catch (Exception $e) {
             DB::rollBack();
             $response = array(
                 'error' => true,
-                'message' => 'Something Went Wrong'.$e
+                'message' => 'Something Went Wrong' . $e
             );
             return response()->json($response, 500);
         }

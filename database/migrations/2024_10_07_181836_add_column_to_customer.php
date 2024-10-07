@@ -12,9 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('customers', function (Blueprint $table) {
-            $table->string("customer_document")->nullable();
-            $table->string("customer_document_status")->default("0");
-
+            $table->boolean("verification_doc")->comment("Is Document Verifed (boolean)")->nullable()->default(0);
         });
     }
 
@@ -24,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('customers', function (Blueprint $table) {
-            //
+            $table->boolean("verification_doc")->comment("Is Document Verifed (boolean)")->nullable()->default(0);
         });
     }
 };

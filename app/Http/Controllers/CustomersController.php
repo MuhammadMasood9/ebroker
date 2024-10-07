@@ -140,9 +140,4 @@ class CustomersController extends Controller
         $bulkData['rows'] = $rows;
         return response()->json($bulkData);
     }
-<<<<<<< HEAD
-=======
-
-
->>>>>>> source-repo/main
 }

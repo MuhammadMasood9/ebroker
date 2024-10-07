@@ -13,11 +13,8 @@
         "guzzlehttp/guzzle": "^7.2",
         "kornrunner/blurhash": "^1.2",
         "laravel/framework": "^10.0",
-<<<<<<< HEAD
+
         "laravel/sanctum": "^3.3",
-=======
-        "laravel/sanctum": "^3.2",
->>>>>>> source-repo/main
         "laravel/telescope": "^5.1",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.0",

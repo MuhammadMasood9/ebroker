@@ -43,7 +43,7 @@ class DocumentVerificationController extends Controller
 
         // Update the customer document status
         $customer = Customer::find($request->id);
-        $customer->customer_document_status = $request->status; // This should be 0 for deactivation
+        $customer->doc_verification_status = $request->status; // This should be 0 for deactivation
         $customer->save();
 
         // Prepare for notification
@@ -76,7 +76,7 @@ class DocumentVerificationController extends Controller
         $order = $request->input('order', 'ASC');
 
         // Fetch customers with non-null documents
-        $query = Customer::whereNotNull('customer_document')->orderBy($sort, $order);
+        $query = Customer::whereNotNull('user_document')->orderBy($sort, $order);
 
         // Apply search filter if any
         if ($request->filled('search')) {
@@ -161,12 +161,12 @@ class DocumentVerificationController extends Controller
          return $customers->map(function ($customer) {
              return [
                  'id' => $customer->id,
-                 'customer_document' => $customer->customer_document,
+                 'user_document' => $customer->user_document,
                  'name' => $customer->name,
                  'mobile' => $customer->mobile,
                  'address' => $customer->address,
-                 'customer_document_status' => $customer->customer_document_status, // Add the status field
-                 'document_status' => $customer->customer_document_status == 1 ? 'Verified' : 'Unproved', // Convert to readable status
+                 'doc_verification_status' => $customer->doc_verification_status, // Add the status field
+                 'document_status' => $customer->doc_verification_status == 1 ? 'Verified' : 'Unproved', // Convert to readable status
              ];
          });
      }

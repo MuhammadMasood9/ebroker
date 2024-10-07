@@ -88,12 +88,14 @@
         }
 
         // Formatter for Enable/Disable switch
-        function enableDisableSwitchFormatter(value, row) {
-            let status = value == "1" ? "checked" : "";
-            return `<div class="form-check form-switch" style="padding-left: 5.2rem;">
-                    <input class="form-check-input switch1" id="${row.id}" onclick="chk(this);" type="checkbox" role="switch" ${status} value="${value}">
-                </div>`;
-        }
+       // Formatter for Enable/Disable switch
+function enableDisableSwitchFormatter(value, row) {
+    let status = row.doc_verification_status == 1 ? "checked" : ""; // Check if document is verified
+    return `<div class="form-check form-switch" style="padding-left: 5.2rem;">
+                <input class="form-check-input switch1" id="${row.id}" onclick="chk(this);" type="checkbox" role="switch" ${status} value="${value}">
+            </div>`;
+}
+
 
         // Formatter for Document Image with modal trigger
         function imageFormatter(value, row) {
