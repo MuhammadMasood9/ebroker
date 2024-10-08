@@ -72,4 +72,4 @@ Default Credentials for Super Admin
 ```bash
   admin@gmail.com
   admin123
-```
+```.
